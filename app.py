@@ -11,7 +11,7 @@ app = dash.Dash(
     __name__,
     external_stylesheets=['https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css']
 )
-app.title = "AI-Powered Portfolio Optimizer"
+app.title = "Individual Stock Sentiment & Performance Analysis"
 
 # Configure caching
 cache = Cache(

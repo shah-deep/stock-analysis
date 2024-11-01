@@ -1,10 +1,13 @@
 from dash import html, dcc
 import plotly.graph_objs as go
+import datetime
 
 def create_app_layout(tickers):
-    """Create the main application layout."""
+    current_year = datetime.datetime.now().year
+    year_options = [{"label": str(year), "value": year} for year in range(current_year-5, current_year+1)]
+    
     return html.Div(className="container py-4", children=[
-        html.H1("AI-Powered Financial Portfolio Optimizer", className="mb-4"),
+        html.H1("Individual Stock Sentiment & Performance Analysis", className="mb-4"),
         
         html.Div(className="row mb-4", children=[
             html.Div(className="col-md-6", children=[
@@ -16,6 +19,15 @@ def create_app_layout(tickers):
                     multi=True,
                     className="mb-3"
                 )
+            ]),
+            html.Div(className="col-md-6", children=[
+                html.Label("Select Year", className="form-label"),
+                dcc.Dropdown(
+                    id="year-dropdown",
+                    options=year_options,
+                    value=current_year,
+                    className="mb-3"
+                )
             ])
         ]),
         
@@ -23,12 +35,6 @@ def create_app_layout(tickers):
         
         html.Div(className="row mb-4", children=[
             html.Div(className="col-md-6", children=[
-                html.Button(
-                    "Calculate Portfolio Performance",
-                    id="calc-button",
-                    n_clicks=0,
-                    className="btn btn-primary me-2"
-                ),
                 html.Button(
                     "Analyze Sentiment",
                     id="sentiment-button",
@@ -38,46 +44,10 @@ def create_app_layout(tickers):
             ])
         ]),
         
-        html.Div(id="performance-metrics", className="mb-4"),
         html.Div(id="performance-plot", className="mb-4"),
         html.Div(id="sentiment-results"),
         html.Div(id="error-display", className="alert alert-danger", style={"display": "none"})
     ])
-
-
-def create_performance_metrics_layout(port_return, port_volatility, sharpe_ratio):
-    """Generate layout for displaying portfolio performance metrics."""
-    return html.Div([
-        html.H3("Portfolio Metrics", className="mb-3"),
-        html.Div(className="row", children=[
-            html.Div(className="col-md-4", children=[
-                html.Div(className="card", children=[
-                    html.Div(className="card-body", children=[
-                        html.H5("Expected Annual Return", className="card-title"),
-                        html.P(f"{port_return:.2%}", className="card-text")
-                    ])
-                ])
-            ]),
-            html.Div(className="col-md-4", children=[
-                html.Div(className="card", children=[
-                    html.Div(className="card-body", children=[
-                        html.H5("Annual Volatility", className="card-title"),
-                        html.P(f"{port_volatility:.2%}", className="card-text")
-                    ])
-                ])
-            ]),
-            html.Div(className="col-md-4", children=[
-                html.Div(className="card", children=[
-                    html.Div(className="card-body", children=[
-                        html.H5("Sharpe Ratio", className="card-title"),
-                        html.P(f"{sharpe_ratio:.2f}", className="card-text")
-                    ])
-                ])
-            ])
-        ])
-    ])
-
-
 
 def create_sentiment_card(asset, sentiment_counts, article_count):
     """Generate a sentiment card for a given asset with sentiment breakdown and article count."""
@@ -111,8 +81,6 @@ def create_sentiment_card(asset, sentiment_counts, article_count):
             ])
         ])
     ])
-
-
 
 def create_performance_plot_layout(fig):
     """Generate layout for displaying performance plot."""
