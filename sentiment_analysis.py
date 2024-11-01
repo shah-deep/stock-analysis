@@ -1,6 +1,6 @@
 from api_clients import newsapi, co
 
-def fetch_news(ticker: str):
+def fetch_news(ticker):
     """Fetch news articles."""
     try:
         articles = newsapi.get_everything(

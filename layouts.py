@@ -1,4 +1,5 @@
 from dash import html, dcc
+import plotly.graph_objs as go
 
 def create_app_layout(tickers):
     """Create the main application layout."""
@@ -38,6 +39,7 @@ def create_app_layout(tickers):
         ]),
         
         html.Div(id="performance-metrics", className="mb-4"),
+        html.Div(id="performance-plot", className="mb-4"),
         html.Div(id="sentiment-results"),
         html.Div(id="error-display", className="alert alert-danger", style={"display": "none"})
     ])
@@ -76,6 +78,7 @@ def create_performance_metrics_layout(port_return, port_volatility, sharpe_ratio
     ])
 
 
+
 def create_sentiment_card(asset, sentiment_counts, article_count):
     """Generate a sentiment card for a given asset with sentiment breakdown and article count."""
     return html.Div(className="card mb-3", children=[
@@ -107,4 +110,13 @@ def create_sentiment_card(asset, sentiment_counts, article_count):
                 f"Based on analysis of {article_count} recent news articles"
             ])
         ])
+    ])
+
+
+
+def create_performance_plot_layout(fig):
+    """Generate layout for displaying performance plot."""
+    return html.Div([
+        html.H3("Performance Visualization", className="mb-3"),
+        dcc.Graph(figure=fig)
     ])

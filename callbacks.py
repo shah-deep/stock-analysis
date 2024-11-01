@@ -2,8 +2,8 @@ import dash
 from dash import dcc, Input, Output, State, html
 import numpy as np
 import pandas as pd
-from layouts import create_performance_metrics_layout, create_sentiment_card
-from data_manager import fetch_stock_data, calculate_portfolio_metrics, portfolio_performance, get_ai_recommendation
+from layouts import create_performance_metrics_layout, create_sentiment_card, create_performance_plot_layout
+from data_manager import fetch_stock_data, calculate_portfolio_metrics, portfolio_performance, create_portfolio_performance_plot
 from sentiment_analysis import fetch_news, analyze_sentiment
 
 def register_callbacks(app):
@@ -34,6 +34,7 @@ def register_callbacks(app):
 
     @app.callback(
         [Output("performance-metrics", "children"),
+         Output("performance-plot", "children"),
          Output("error-display", "children"),
          Output("error-display", "style")],
         [Input("calc-button", "n_clicks")],
@@ -42,14 +43,14 @@ def register_callbacks(app):
     )
     def display_portfolio_performance(n_clicks, selected_assets, weights):
         if n_clicks == 0:
-            return "", "", {"display": "none"}
+            return "", "", "", {"display": "none"}
         
         try:
             if not selected_assets or not weights:
                 raise ValueError("Please select assets and set weights")
             
             data = fetch_stock_data(selected_assets, 365 * 3)  # 3 years of data
-            daily_returns = data.pct_change().dropna()
+            daily_returns = data.pct_change(fill_method=None).dropna()
             expected_returns, cov_matrix = calculate_portfolio_metrics(daily_returns)
             
             weights = np.array(weights)
@@ -57,10 +58,18 @@ def register_callbacks(app):
                 weights, expected_returns, cov_matrix
             )
             
-            return create_performance_metrics_layout(port_return, port_volatility, sharpe_ratio), "", {"display": "none"}
+            # Create performance plot
+            performance_fig = create_portfolio_performance_plot(data, weights)
+            
+            return (
+                create_performance_metrics_layout(port_return, port_volatility, sharpe_ratio), 
+                create_performance_plot_layout(performance_fig), 
+                "", 
+                {"display": "none"}
+            )
             
         except Exception as e:
-            return "", str(e), {"display": "block"}
+            return "", "", str(e), {"display": "block"}
 
     @app.callback(
         [Output("sentiment-results", "children"),

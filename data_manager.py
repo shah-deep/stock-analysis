@@ -1,8 +1,8 @@
 import yfinance as yf
 import pandas as pd
 import numpy as np
+import plotly.graph_objs as go
 from datetime import datetime, timedelta
-from api_clients import co
 
 def fetch_stock_data(tickers, lookback_days):
     """Fetch historical stock data."""
@@ -34,3 +34,42 @@ def portfolio_performance(weights, expected_returns, cov_matrix):
     sharpe_ratio = portfolio_return / portfolio_volatility if portfolio_volatility != 0 else 0
     
     return portfolio_return, portfolio_volatility, sharpe_ratio
+
+def create_portfolio_performance_plot(data, weights):
+    """Create a plot showing individual stock and portfolio performance."""
+    # Normalize stock prices to start at 100
+    normalized_data = data / data.iloc[0] * 100
+    
+    # Create traces for each stock
+    traces = [
+        go.Scatter(
+            x=normalized_data.index, 
+            y=normalized_data[ticker], 
+            name=f'{ticker} Performance',
+            mode='lines'
+        ) for ticker in normalized_data.columns
+    ]
+    
+    # Calculate weighted portfolio performance
+    portfolio_performance = normalized_data.mul(weights).sum(axis=1)
+    traces.append(
+        go.Scatter(
+            x=portfolio_performance.index, 
+            y=portfolio_performance, 
+            name='Portfolio Performance', 
+            line=dict(color='black', width=3),
+            mode='lines'
+        )
+    )
+    
+    # Layout
+    layout = go.Layout(
+        title='Asset and Portfolio Performance',
+        xaxis=dict(title='Date'),
+        yaxis=dict(title='Normalized Performance (Base 100)'),
+        template='plotly_white'
+    )
+    
+    # Create figure
+    fig = go.Figure(data=traces, layout=layout)
+    return fig
