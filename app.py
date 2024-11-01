@@ -1,9 +1,7 @@
 import dash
-from flask_caching import Cache
 from layouts import create_app_layout
 from callbacks import register_callbacks
 
-# Initialize Dash app
 app = dash.Dash(
     __name__,
     external_stylesheets=['https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css']

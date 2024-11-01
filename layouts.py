@@ -8,7 +8,7 @@ import datetime
 def create_app_layout():
     current_year = datetime.datetime.now().year
     year_options = [{"label": str(year), "value": year} for year in range(current_year - 5, current_year + 1)]
-    tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "FB", "TSLA", "NFLX", "NVDA"]
+    tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "NFLX", "NVDA"]
     default_tickers = ["AAPL", "AMZN", "GOOGL"]
     
     return html.Div(className="container py-4", children=[
