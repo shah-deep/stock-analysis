@@ -9,10 +9,10 @@ def create_app_layout():
     current_year = datetime.datetime.now().year
     year_options = [{"label": str(year), "value": year} for year in range(current_year - 5, current_year + 1)]
     tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "FB", "TSLA", "NFLX", "NVDA"]
-    default_tickers = ["AAPL", "MSFT", "AMZN", "GOOGL"]
+    default_tickers = ["AAPL", "AMZN", "GOOGL"]
     
     return html.Div(className="container py-4", children=[
-        html.H1("Individual Stock Sentiment & Performance Analysis", className="mb-4"),
+        html.H1("Stock Analysis", className="mb-4"),
         
         html.Div(className="row mb-4", children=[
             html.Div(className="col-md-6", children=[
@@ -36,7 +36,6 @@ def create_app_layout():
             ])
         ]),
         
-        html.Div(id="weight-sliders", className="mb-4"),
         
         html.Div(className="row mb-4", children=[
             html.Div(className="col-md-6", children=[
@@ -87,9 +86,9 @@ def create_sentiment_card(asset, sentiment_counts, article_count):
         ])
     ])
 
-def create_performance_plot_layout(fig):
+def create_performance_plot_layout(fig, selected_year):
     """Generate layout for displaying performance plot."""
     return html.Div([
-        html.H3("Performance Visualization", className="mb-3"),
+        html.H4(f"Performance Visualization for {selected_year}", className="mb-3"),
         dcc.Graph(figure=fig)
     ])

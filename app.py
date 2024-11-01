@@ -8,7 +8,7 @@ app = dash.Dash(
     __name__,
     external_stylesheets=['https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css']
 )
-app.title = "Individual Stock Sentiment & Performance Analysis"
+app.title = "Stock Analysis"
 
 # Configure caching
 cache = Cache(
@@ -20,10 +20,10 @@ cache = Cache(
 )
 
 # Set up app layout
-app.layout = create_app_layout()  # Removed the TICKERS argument
+app.layout = create_app_layout()
 
 # Register callbacks
 register_callbacks(app)
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)

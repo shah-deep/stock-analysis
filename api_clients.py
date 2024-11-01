@@ -15,7 +15,6 @@ def get_required_env_var(var_name):
     return value
 
 def initialize_apis():
-    """Initialize API clients for News & LLM"""
     try:
         news_api_key = get_required_env_var("NEWS_API_KEY")
         cohere_api_key = get_required_env_var("COHERE_API_KEY")

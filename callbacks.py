@@ -7,7 +7,6 @@ from sentiment_analysis import fetch_news, analyze_sentiment
 import plotly.graph_objs as go
 
 def register_callbacks(app):
-    """Register all callbacks for the application."""
     
     @app.callback(
         Output("performance-plot", "children"),
@@ -30,15 +29,13 @@ def register_callbacks(app):
             fig.add_trace(go.Scatter(x=data.index, y=data[asset], mode="lines", name=asset))
 
         fig.update_layout(
-            title=f"Stock Performance in {selected_year}",
-            xaxis_title="Date",
-            yaxis_title="Adjusted Closing Price",
+            yaxis_title="Closing Price",
             template="plotly_white"
         )
 
-        return create_performance_plot_layout(fig)
+        return create_performance_plot_layout(fig, selected_year)
     
-    
+
     @app.callback(
         [Output("sentiment-results", "children"),
          Output("error-display", "children"),

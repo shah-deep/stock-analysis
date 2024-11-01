@@ -1,6 +1,4 @@
 import yfinance as yf
-import pandas as pd
-from datetime import datetime
 
 def fetch_stock_data(tickers, start_date, end_date):
     """Fetch historical stock data for given tickers between start_date and end_date."""
