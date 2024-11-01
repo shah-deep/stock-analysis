@@ -3,9 +3,6 @@ from flask_caching import Cache
 from layouts import create_app_layout
 from callbacks import register_callbacks
 
-# Constants
-TICKERS = ["AAPL", "MSFT", "AMZN", "GOOGL"]
-
 # Initialize Dash app
 app = dash.Dash(
     __name__,
@@ -23,7 +20,7 @@ cache = Cache(
 )
 
 # Set up app layout
-app.layout = create_app_layout(TICKERS)
+app.layout = create_app_layout()  # Removed the TICKERS argument
 
 # Register callbacks
 register_callbacks(app)

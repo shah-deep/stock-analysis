@@ -2,9 +2,14 @@ from dash import html, dcc
 import plotly.graph_objs as go
 import datetime
 
-def create_app_layout(tickers):
+from dash import html, dcc
+import datetime
+
+def create_app_layout():
     current_year = datetime.datetime.now().year
-    year_options = [{"label": str(year), "value": year} for year in range(current_year-5, current_year+1)]
+    year_options = [{"label": str(year), "value": year} for year in range(current_year - 5, current_year + 1)]
+    tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "FB", "TSLA", "NFLX", "NVDA"]
+    default_tickers = ["AAPL", "MSFT", "AMZN", "GOOGL"]
     
     return html.Div(className="container py-4", children=[
         html.H1("Individual Stock Sentiment & Performance Analysis", className="mb-4"),
@@ -15,7 +20,7 @@ def create_app_layout(tickers):
                 dcc.Dropdown(
                     id="asset-dropdown",
                     options=[{"label": ticker, "value": ticker} for ticker in tickers],
-                    value=tickers,
+                    value=default_tickers,
                     multi=True,
                     className="mb-3"
                 )
