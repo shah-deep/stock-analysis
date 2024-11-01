@@ -10,15 +10,6 @@ app = dash.Dash(
 )
 app.title = "Stock Analysis"
 
-# Configure caching
-cache = Cache(
-    app.server,
-    config={
-        "CACHE_TYPE": "SimpleCache",
-        "CACHE_DEFAULT_TIMEOUT": 300
-    }
-)
-
 # Set up app layout
 app.layout = create_app_layout()
 
