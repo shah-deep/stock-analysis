@@ -57,23 +57,23 @@ def create_sentiment_card(asset, sentiment_counts, article_count):
     """Generate a sentiment card for a given asset with sentiment breakdown and article count."""
     return html.Div(className="card mb-3", children=[
         html.Div(className="card-header", children=[
-            html.H4(f"{asset} Sentiment Analysis", className="mb-0")
+            html.H5(f"{asset} Sentiment Analysis", className="mb-0")
         ]),
         html.Div(className="card-body", children=[
             html.Div(className="row", children=[
-                html.Div(className="col-md-4", children=[
+                html.Div(className="col-sm-4", children=[
                     html.Div(className="alert alert-success", children=[
                         html.Strong("Positive: "),
                         html.Span(f"{sentiment_counts.get('positive', 0):.1f}%")
                     ])
                 ]),
-                html.Div(className="col-md-4", children=[
+                html.Div(className="col-sm-4", children=[
                     html.Div(className="alert alert-secondary", children=[
                         html.Strong("Neutral: "),
                         html.Span(f"{sentiment_counts.get('neutral', 0):.1f}%")
                     ])
                 ]),
-                html.Div(className="col-md-4", children=[
+                html.Div(className="col-sm-4", children=[
                     html.Div(className="alert alert-danger", children=[
                         html.Strong("Negative: "),
                         html.Span(f"{sentiment_counts.get('negative', 0):.1f}%")
