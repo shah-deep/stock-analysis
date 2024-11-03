@@ -1,5 +1,6 @@
 # StockSense AI: Stock Performance & Sentiment Analysis Tool
 
-A web-app to Analyse various stocks using Yahoo Finance and perform Sentiment Analysis using Generative AI.
+A stock analysis tool that visualizes stock performance with yfinance and uses Cohere’s generative AI
+with NewsApiClient to conduct sentiment analysis on recent news, providing enhanced market insights.
 
 ![out](./output.png)
