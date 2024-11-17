@@ -1,6 +1,7 @@
 from dash import Input, Output, State, html
 import pandas as pd
-import calendar, datetime
+import calendar
+from datetime import datetime
 from layouts import create_sentiment_card, create_performance_plot_layout
 from data_manager import fetch_stock_data
 from sentiment_analysis import fetch_news, analyze_sentiment
@@ -17,22 +18,25 @@ def register_callbacks(app):
     def update_performance_plot(selected_assets, selected_year, selected_month):
     
         # Calculate start and end dates
-        current_year = datetime.datetime.now().year
+        current_year = datetime.now().year
+        last_month = 12
         if(selected_month):
-            current_month = datetime.datetime.now().month
-            if (current_year==selected_year) and (selected_month>current_month):
-                selected_month = current_month
+            current_month = datetime.now().month
+            if (current_year==selected_year):
+                last_month = current_month
+                if(selected_month>current_month):
+                    selected_month = current_month
+
             last_day = calendar.monthrange(selected_year, selected_month)[1]
             start_date = f"{selected_year}-{selected_month:02d}-01"
             end_date = f"{selected_year}-{selected_month:02d}-{last_day}"
+            
         else:
             start_date = f"{selected_year}-01-01"
             end_date = f"{selected_year}-12-31"
 
-        if(current_year!=selected_year):
-            month_options = [{"label": datetime.datetime(selected_year, month, 1).strftime("%B"), "value": month} for month in range(1, 13)]
-        else:
-            month_options = [{"label": datetime.datetime(selected_year, month, 1).strftime("%B"), "value": month} for month in range(1, selected_month+1)]
+
+        month_options = [{"label": datetime(selected_year, month, 1).strftime("%B"), "value": month} for month in range(1, last_month+1)]
 
         if not selected_assets:
             return html.Div("Please select at least one asset", className="alert alert-warning"), month_options, selected_month
