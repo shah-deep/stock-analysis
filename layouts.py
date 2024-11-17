@@ -1,5 +1,4 @@
 from dash import html, dcc
-import plotly.graph_objs as go
 import datetime
 
 from dash import html, dcc

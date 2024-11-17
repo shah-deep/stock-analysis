@@ -4,7 +4,7 @@ import pandas as pd
 from layouts import create_sentiment_card, create_performance_plot_layout
 from data_manager import fetch_stock_data
 from sentiment_analysis import fetch_news, analyze_sentiment
-import plotly.graph_objs as go
+import plotly.express as px
 
 def register_callbacks(app):
     
@@ -24,14 +24,9 @@ def register_callbacks(app):
         data = fetch_stock_data(selected_assets, start_date, end_date)
 
         # Generate the plot
-        fig = go.Figure()
-        for asset in selected_assets:
-            fig.add_trace(go.Scatter(x=data.index, y=data[asset], mode="lines", name=asset))
-
-        fig.update_layout(
-            yaxis_title="Closing Price",
-            template="plotly_white"
-        )
+        fig = px.line(data, x=data.index, y=selected_assets, 
+                      labels={"value": "Closing Price", "Date": "Time", "variable": "Asset"},
+                      template="plotly_white")
 
         return create_performance_plot_layout(fig, selected_year)
     
