@@ -1,7 +1,6 @@
-import dash
-from dash import dcc, Input, Output, State, html
+from dash import Input, Output, State, html
 import pandas as pd
-import calendar
+import calendar, datetime
 from layouts import create_sentiment_card, create_performance_plot_layout
 from data_manager import fetch_stock_data
 from sentiment_analysis import fetch_news, analyze_sentiment
@@ -10,21 +9,33 @@ import plotly.express as px
 def register_callbacks(app):
     
     @app.callback(
-        Output("performance-plot", "children"),
+        [Output("performance-plot", "children"), 
+         Output("month-dropdown", "options"), 
+         Output("month-dropdown", "value")],
         [Input("asset-dropdown", "value"), Input("year-dropdown", "value"), Input("month-dropdown", "value")]
     )
     def update_performance_plot(selected_assets, selected_year, selected_month):
-        if not selected_assets:
-            return html.Div("Please select at least one asset", className="alert alert-warning")
-
+    
         # Calculate start and end dates
+        current_year = datetime.datetime.now().year
         if(selected_month):
+            current_month = datetime.datetime.now().month
+            if (current_year==selected_year) and (selected_month>current_month):
+                selected_month = current_month
             last_day = calendar.monthrange(selected_year, selected_month)[1]
             start_date = f"{selected_year}-{selected_month:02d}-01"
             end_date = f"{selected_year}-{selected_month:02d}-{last_day}"
         else:
             start_date = f"{selected_year}-01-01"
             end_date = f"{selected_year}-12-31"
+
+        if(current_year!=selected_year):
+            month_options = [{"label": datetime.datetime(selected_year, month, 1).strftime("%B"), "value": month} for month in range(1, 13)]
+        else:
+            month_options = [{"label": datetime.datetime(selected_year, month, 1).strftime("%B"), "value": month} for month in range(1, selected_month+1)]
+
+        if not selected_assets:
+            return html.Div("Please select at least one asset", className="alert alert-warning"), month_options, selected_month
 
         # Fetch stock data for selected assets within the selected year
         data = fetch_stock_data(selected_assets, start_date, end_date)
@@ -37,7 +48,10 @@ def register_callbacks(app):
             month_str = calendar.month_name[selected_month] + " "
         else:
             month_str = ""
-        return create_performance_plot_layout(fig, selected_year, month_str)
+        plot_layout = create_performance_plot_layout(fig, selected_year, month_str)
+
+        
+        return plot_layout, month_options, selected_month
     
     
 

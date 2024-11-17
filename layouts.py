@@ -1,9 +1,6 @@
 from dash import html, dcc
 import datetime
 
-from dash import html, dcc
-import datetime
-
 def create_app_layout():
     current_year = datetime.datetime.now().year
     current_month = datetime.datetime.now().month
