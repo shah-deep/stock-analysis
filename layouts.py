@@ -6,15 +6,18 @@ import datetime
 
 def create_app_layout():
     current_year = datetime.datetime.now().year
-    year_options = [{"label": str(year), "value": year} for year in range(current_year - 5, current_year + 1)]
+    current_month = datetime.datetime.now().month
+    year_options = [{"label": str(year), "value": year} for year in range(current_year-5, current_year+1)]
+    month_options = [{"label": datetime.datetime(current_year, month, 1).strftime("%B"), "value": month} for month in range(1, current_month+1)]
+
     tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "NFLX", "NVDA"]
     default_tickers = ["AAPL", "AMZN", "GOOGL"]
     
     return html.Div(className="container py-4", children=[
-        html.H1("Stock Analysis", className="mb-4"),
+        html.H1("StockSense AI", className="mb-4"),
         
         html.Div(className="row mb-4", children=[
-            html.Div(className="col-md-6", children=[
+            html.Div(className="col-md-4", children=[
                 html.Label("Select Assets", className="form-label"),
                 dcc.Dropdown(
                     id="asset-dropdown",
@@ -24,12 +27,22 @@ def create_app_layout():
                     className="mb-3"
                 )
             ]),
-            html.Div(className="col-md-6", children=[
+            html.Div(className="col-md-4", children=[
                 html.Label("Select Year", className="form-label"),
                 dcc.Dropdown(
                     id="year-dropdown",
                     options=year_options,
                     value=current_year,
+                    className="mb-3",
+                    clearable=False
+                )
+            ]),
+            html.Div(className="col-md-4", children=[
+                html.Label("Select Month", className="form-label"),
+                dcc.Dropdown(
+                    id="month-dropdown",
+                    options=month_options,
+                    value=current_month,
                     className="mb-3"
                 )
             ])
@@ -85,9 +98,9 @@ def create_sentiment_card(asset, sentiment_counts, article_count):
         ])
     ])
 
-def create_performance_plot_layout(fig, selected_year):
+def create_performance_plot_layout(fig, selected_year, selected_month):
     """Generate layout for displaying performance plot."""
     return html.Div([
-        html.H4(f"Performance Visualization for {selected_year}", className="mb-3"),
+        html.H4(f"Performance Visualization for {selected_month}{selected_year}", className="mb-3"),
         dcc.Graph(figure=fig)
     ])
