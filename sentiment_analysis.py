@@ -32,7 +32,6 @@ def analyze_sentiment(news_articles):
             
             sentiment = (
                 response.generations[0].text
-                .strip()
                 .lower()
                 .replace('.', '')
                 .replace('\n', '')
