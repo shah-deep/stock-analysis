@@ -77,5 +77,5 @@ def register_callbacks(app):
             return html.Div(sentiment_output), "", {"display": "none"}
 
         except Exception as e:
-            print(e)
+            print(f"Error in sentiment analysis: {e}")
             return "", str(e), {"display": "block"}
